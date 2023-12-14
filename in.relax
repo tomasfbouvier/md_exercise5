@@ -1,0 +1,24 @@
+units metal
+atom_style	atomic
+boundary	p p p
+
+read_data 	G_C
+
+pair_style      edip/multi
+pair_coeff	* * SiC.edip Si C
+
+#fix 1 all npt temp 100 0.01 0.3
+#run 3000
+
+min_style 	cg
+min_modify dmax 0.1
+fix 1 all box/relax iso 0.0 
+
+dump 1 all custom 1 min_traj.lammps id type x y z
+
+
+minimize 1.0e-7 1.0e-8 20000 20000
+write_data G_C
+
+clear
+
